@@ -82,6 +82,4 @@ Install AUR packages with `yay`:
 yay -S --needed - < packages/pkglist-aur.txt
 ```
 
-## Notes Before Publishing
 
-Some visual assets were collected locally. Check license/permission for wallpapers, backgrounds, fonts, and third-party themes before making the repository public.
