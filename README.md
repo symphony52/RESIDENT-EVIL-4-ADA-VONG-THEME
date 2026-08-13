@@ -52,6 +52,12 @@ RE_STATUS_ANIMATE=0 re-terminal-status
 
 ## Install
 
+Check what the installer would change:
+
+```bash
+./scripts/install.sh --dry-run
+```
+
 Home configs only:
 
 ```bash
@@ -73,13 +79,13 @@ The installer creates timestamped backups before replacing files.
 Install native packages:
 
 ```bash
-sudo pacman -S --needed - < packages/pkglist-native.txt
+xargs -a packages/pkglist-native.txt sudo pacman -S --needed
 ```
 
 Install AUR packages with `yay`:
 
 ```bash
-yay -S --needed - < packages/pkglist-aur.txt
+xargs -a packages/pkglist-aur.txt yay -S --needed
 ```
 
 
