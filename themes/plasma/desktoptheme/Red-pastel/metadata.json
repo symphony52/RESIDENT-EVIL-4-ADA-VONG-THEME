@@ -1,0 +1,19 @@
+{
+    "KPackageStructure": "Plasma/Theme",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "rkstrdee@gmail.com",
+                "Name": "Dharam Dhurandhar"
+            }
+        ],
+        "Category": "Plasma Theme",
+        "Description": "A dark and modern red theme for Plasma 6.",
+        "EnabledByDefault": true,
+        "Id": "Red-pastel",
+        "License": "GPL-3.0",
+        "Name": "Red-pastel",
+        "Version": "6.0.0"
+    },
+    "X-Plasma-API": "6.0"
+}

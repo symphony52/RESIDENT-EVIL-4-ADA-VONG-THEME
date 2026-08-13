@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+set -u
+
+red=$'\033[38;5;196m'
+darkred=$'\033[38;5;88m'
+green=$'\033[38;5;118m'
+cyan=$'\033[38;5;45m'
+yellow=$'\033[38;5;220m'
+gray=$'\033[38;5;242m'
+white=$'\033[38;5;255m'
+dim=$'\033[2m'
+reset=$'\033[0m'
+
+mode=${1:-status}
+host=${HOSTNAME:-unknown}
+user=${USER:-operator}
+kernel=$(uname -r 2>/dev/null || printf 'classified')
+shell_name=${SHELL##*/}
+uptime_text=$(uptime -p 2>/dev/null | sed 's/^up //' || true)
+path_text=${PWD/#$HOME/~}
+pkg_count=$(pacman -Qq 2>/dev/null | wc -l | tr -d ' ' || printf '?')
+
+clip() {
+    local value=${1:-}
+    local width=${2:-28}
+
+    if ((${#value} > width)); then
+        printf '%s…' "${value:0:width-1}"
+    else
+        printf '%s' "$value"
+    fi
+}
+
+line() {
+    local text=$1
+
+    if [[ -t 1 && ${TERM:-dumb} != dumb && ${RE_STATUS_ANIMATE:-1} != 0 ]]; then
+        local i
+        for ((i = 0; i < ${#text}; i++)); do
+            printf '%s' "${text:i:1}"
+            sleep "${RE_STATUS_DELAY:-0.002}"
+        done
+        printf '\n'
+    else
+        printf '%s\n' "$text"
+    fi
+}
+
+box_line() {
+    line "$1"
+}
+
+status() {
+    local identity location uptime
+    identity=$(clip "$user@$host" 28)
+    location=$(clip "$path_text" 28)
+    uptime=$(clip "${uptime_text:-classified}" 28)
+
+    printf '\n'
+    box_line "${darkred}  ╔════════════════════════════════════════════════════════════════════════╗${reset}"
+    box_line "${darkred}  ║${red}  U M B R E L L A   C O N T R O L   N O D E        ${gray}SAVE ROOM      ${darkred}║${reset}"
+    box_line "${darkred}  ╟──────────────────────┬──────────────────────────────┬────────────────╢${reset}"
+    printf '%s  ║%s operator             %s│%s %-28s %s│%s    _______     %s║%s\n' "$darkred" "$gray" "$darkred" "$white" "$identity" "$darkred" "$gray" "$darkred" "$reset"
+    printf '%s  ║%s kernel               %s│%s %-28s %s│%s  _/ _____ \\_   %s║%s\n' "$darkred" "$gray" "$darkred" "$white" "$(clip "$kernel" 28)" "$darkred" "$gray" "$darkred" "$reset"
+    printf '%s  ║%s shell                %s│%s %-28s %s│%s |  o o o  |   %s║%s\n' "$darkred" "$gray" "$darkred" "$white" "$(clip "$shell_name" 28)" "$darkred" "$gray" "$darkred" "$reset"
+    printf '%s  ║%s uptime               %s│%s %-28s %s│%s |_________|   %s║%s\n' "$darkred" "$gray" "$darkred" "$white" "$uptime" "$darkred" "$gray" "$darkred" "$reset"
+    printf '%s  ║%s location             %s│%s %-28s %s│%s /|  ___  |\\   %s║%s\n' "$darkred" "$gray" "$darkred" "$cyan" "$location" "$darkred" "$gray" "$darkred" "$reset"
+    printf '%s  ║%s packages             %s│%s %-28s %s│%s  |__|_|__|    %s║%s\n' "$darkred" "$gray" "$darkred" "$yellow" "$(clip "$pkg_count tracked" 28)" "$darkred" "$gray" "$darkred" "$reset"
+    box_line "${darkred}  ╟──────────────────────┴──────────────────────────────┴────────────────╢${reset}"
+    box_line "${darkred}  ║${gray} threat index ${green}▰▰▰▰▱${gray}  ${green}CONTAINED${gray}   ${dim}access${gray} LEVEL-03                 ${darkred}║${reset}"
+    box_line "${darkred}  ╚════════════════════════════════════════════════════════════════════════╝${reset}"
+    line "${dim}     commands: ${yellow}re${dim} status, ${yellow}threat${dim} protocol scan${reset}"
+    printf '\n'
+}
+
+threat() {
+    printf '\n'
+    line "${darkred}  [ UMBRELLA SECURITY PROTOCOL ]${reset}"
+    line "${gray}  boot sector       ${green}clean${reset}"
+    line "${gray}  shell integrity   ${green}sealed${reset}"
+    line "${gray}  theme archive     ${yellow}ink ribbon ready${reset}"
+    line "${gray}  containment       ${green}active${reset}"
+    printf '\n'
+}
+
+case "$mode" in
+    status|re|"")
+        status
+        ;;
+    threat|scan)
+        threat
+        ;;
+    -h|--help|help)
+        printf 'Usage: re-terminal-status [status|threat]\n'
+        ;;
+    *)
+        printf 'Unknown mode: %s\nUsage: re-terminal-status [status|threat]\n' "$mode" >&2
+        exit 2
+        ;;
+esac

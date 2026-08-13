@@ -1,0 +1,24 @@
+.DS_Store
+*.bak
+*.codex-bak*
+*.black-screen-bak*
+*.white-bak*
+*.snapshot-backup*
+*.tar
+*.tar.gz
+*.zip
+
+# Keep personal/runtime data out of GitHub.
+.cache/
+.local/share/Trash/
+.config/Code/
+.config/Cursor/
+.config/AmneziaVPN.ORG/
+.mozilla/
+.gnupg/
+.ssh/
+.codex/
+auth.json
+token*
+*.key
+*.pem

@@ -1,0 +1,10 @@
+cursor-appimage
+flclashx-bin
+happ-desktop-bin
+notion-app-electron
+openai-codex-bin
+portproton
+protonup-qt
+spotify
+throne-bin
+visual-studio-code-bin
